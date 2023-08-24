@@ -2,7 +2,7 @@ Week 6 - Challenge 4
 Calculadora WebService
 Crea una calculadora en Node en forma de web.
 
-El programa debe recibir dos números por query params (p.e. http://localhost:8000/calculator?a=6&b=3), y devolver el siguiente HTML:
+El programa debe recibir dos números por query params (p.e. http://localhost:3000/calculator?a=6&b=3), y devolver el siguiente HTML:
 
 Resultados:
 
