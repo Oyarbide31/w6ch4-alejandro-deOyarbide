@@ -1,3 +1,4 @@
+/*
 // import * as dotenv from 'dotenv';
 
 // dotenv.config();
@@ -66,3 +67,23 @@ server.on('error', (error) => {
     return sum, rest, mult, div;
   }
 });*/
+
+const server = createServer((req, res) => {
+  if (!req.url) {
+    server.emit('error', new Error('No url in the request'));
+    return;
+  }
+  /* aki creo un mensaje de error si get no es correcto */
+  // parsear es trabajar con la cadena de caracteres ( en este caso mi url)
+  /* la request es la peticion */
+
+  //http://localhost:3000/calculator?a=6&b=3
+
+  const { pathname, query } = url.parse(req.url);
+
+  const params = query;
+  res.setHeader('Content-Type', 'text/html');
+  res.statusCode = 202;
+  res.write('<h1>Calculadora!</h1>');
+  res.end();
+});

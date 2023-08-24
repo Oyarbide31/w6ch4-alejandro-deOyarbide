@@ -1,6 +1,7 @@
 import { program } from 'commander';
 import 'dotenv/config';
 import { createServer } from 'http';
+import * as url from 'url';
 
 let PORT = process.env.PORT || 3000;
 
@@ -20,15 +21,29 @@ if (options.port) {
 }
 
 const server = createServer((req, res) => {
-  if (!req.url) {
-    server.emit('error', new Error('No url in the request'));
-    return;
-  }
+  //http://localhost:3000/calculator?a=6&b=3
+  let queryData = url.parse(req.url, true).query;
+  console.log(req.url);
 
-  res.setHeader('Content-Type', 'text/html');
-  res.statusCode = 202;
-  res.write('<h1>Calculadora!</h1>');
-  res.end();
+  //modify response, modificar respuesta
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  //comprobar si la variable a existe en la url
+  if (queryData.a && queryData.b) {
+    //res.end('Tu numero es:  ' + queryData.a + '\n');
+    let a = +queryData.a;
+    let b = +queryData.b;
+    //con el +justo despues de la propiedad queryData le fuerzo a que sea un numero
+
+    res.end(`
+      a = ${a} b= ${b} suma = ${a + b}  \n
+      a = ${a} b= ${b} resta = ${a - b} \n
+      a = ${a} b= ${b} multiplicacion = ${a * b}  \n
+      a = ${a} b= ${b} division = ${a / b}  \n
+    `);
+    // dentro de res end meto el codigo html
+  } else {
+    res.end('Igual te falta un número! a \n');
+  }
 });
 
 server.listen(PORT);
@@ -40,14 +55,3 @@ server.on('listening', () => {
 server.on('error', (error) => {
   console.log(`Error ${error.message}`);
 });
-
-/*const server = http.createServer((request, Response) => {
-  function calculator(a: number, b: number) {
-    let sum = a + b;
-    let rest = a - b;
-    let mult = a * b;
-    let div = a / b;
-
-    return sum, rest, mult, div;
-  }
-});*/
