@@ -21,19 +21,14 @@ if (options.port) {
 }
 
 const server = createServer((req, res) => {
-  //http://localhost:3000/calculator?a=6&b=3
   let queryData = url.parse(req.url, true).query;
   console.log(req.url);
 
-  //modify response, modificar respuesta
-
-  //comprobar si la variable a existe en la url
   if (queryData.a && queryData.b) {
     res.writeHead(400, { 'Content-Type': 'text/plain' });
-    //res.end('Tu numero es:  ' + queryData.a + '\n');
+
     let a = +queryData.a;
     let b = +queryData.b;
-    //con el +justo despues de la propiedad queryData le fuerzo a que sea un numero
 
     res.end(`
       a = ${a} b= ${b} suma = ${a + b}  \n
@@ -41,7 +36,6 @@ const server = createServer((req, res) => {
       a = ${a} b= ${b} multiplicacion = ${a * b}  \n
       a = ${a} b= ${b} division = ${a / b}  \n
     `);
-    // dentro de res end meto el codigo html
   } else {
     res.end('Igual te falta un número! a \n');
   }
