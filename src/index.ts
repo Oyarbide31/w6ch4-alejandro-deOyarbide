@@ -26,9 +26,10 @@ const server = createServer((req, res) => {
   console.log(req.url);
 
   //modify response, modificar respuesta
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
   //comprobar si la variable a existe en la url
   if (queryData.a && queryData.b) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
     //res.end('Tu numero es:  ' + queryData.a + '\n');
     let a = +queryData.a;
     let b = +queryData.b;

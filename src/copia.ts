@@ -1,22 +1,7 @@
-/*
-// import * as dotenv from 'dotenv';
-
-// dotenv.config();
-
-// let PORT = process.env.PORT || 1989;
-
-// const a = 3;
-// const b = 3;
-// const url = `http://localhost:8000/calculator?a=${a}&b=${b}`;
-/*
-hay que hacer una funcion con todas las operaciones pasadas por parametros 
-
-*/
-// console.log('ey!');
-
 import { program } from 'commander';
 import 'dotenv/config';
 import { createServer } from 'http';
+import * as url from 'url';
 
 let PORT = process.env.PORT || 3000;
 
@@ -36,15 +21,29 @@ if (options.port) {
 }
 
 const server = createServer((req, res) => {
-  if (req.method !== 'GET') {
-    server.emit('error', new Error(`Unsupported method ${req.method}`));
-    console.log(req.method, req.url, 'Hola Mundo');
-  }
+  //http://localhost:3000/calculator?a=6&b=3
+  let queryData = url.parse(req.url, true).query;
+  console.log(req.url);
 
-  res.setHeader('Content-Type', 'text/html');
-  res.statusCode = 202;
-  res.write('<h1>Calculadora!</h1>');
-  res.end();
+  //modify response, modificar respuesta
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  //comprobar si la variable a existe en la url
+  if (queryData.a && queryData.b) {
+    //res.end('Tu numero es:  ' + queryData.a + '\n');
+    let a = +queryData.a;
+    let b = +queryData.b;
+    //con el +justo despues de la propiedad queryData le fuerzo a que sea un numero
+
+    res.end(`
+      a = ${a} b= ${b} suma = ${a + b}  \n
+      a = ${a} b= ${b} resta = ${a - b} \n
+      a = ${a} b= ${b} multiplicacion = ${a * b}  \n
+      a = ${a} b= ${b} division = ${a / b}  \n
+    `);
+    // dentro de res end meto el codigo html
+  } else {
+    res.end('Igual te falta un número! a \n');
+  }
 });
 
 server.listen(PORT);
@@ -55,35 +54,4 @@ server.on('listening', () => {
 
 server.on('error', (error) => {
   console.log(`Error ${error.message}`);
-});
-
-/*const server = http.createServer((request, Response) => {
-  function calculator(a: number, b: number) {
-    let sum = a + b;
-    let rest = a - b;
-    let mult = a * b;
-    let div = a / b;
-
-    return sum, rest, mult, div;
-  }
-});*/
-
-const server = createServer((req, res) => {
-  if (!req.url) {
-    server.emit('error', new Error('No url in the request'));
-    return;
-  }
-  /* aki creo un mensaje de error si get no es correcto */
-  // parsear es trabajar con la cadena de caracteres ( en este caso mi url)
-  /* la request es la peticion */
-
-  //http://localhost:3000/calculator?a=6&b=3
-
-  const { pathname, query } = url.parse(req.url);
-
-  const params = query;
-  res.setHeader('Content-Type', 'text/html');
-  res.statusCode = 202;
-  res.write('<h1>Calculadora!</h1>');
-  res.end();
 });
